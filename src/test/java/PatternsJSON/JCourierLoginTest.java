@@ -26,6 +26,8 @@ public class JCourierLoginTest {
     @Test
     public void courierLogin(){
         CourierClient courierClient = new CourierClient();
+
+
         JCourier courier = CourierGenerator.randomCourier();
         Response response = courierClient.create(courier);
         Response courierLogin = courierClient.login(CourierCreds.credsFrom(courier));

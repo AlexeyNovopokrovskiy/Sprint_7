@@ -73,6 +73,8 @@ public class JOrdersTest {
         OrderClient orderClient = new OrderClient();
         Response response = orderClient.getAllOrders();
         assertEquals(200,response.statusCode());
+
+
     }
 
 }

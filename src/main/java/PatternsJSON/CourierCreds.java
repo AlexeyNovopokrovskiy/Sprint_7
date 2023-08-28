@@ -54,6 +54,8 @@ public class CourierCreds {
         return new CourierCreds(newLogin, courier.getPassword());
     }
 
+
+
     public static CourierCreds credsNullifiedPassword(JCourier courier){
         //System.out.println(courier.getPassword());
         String newPassword = "";

@@ -9,6 +9,8 @@ public class CourierClient {
     private static final String BASE_URL = "/api/v1/courier";
     private static final String BASE_URL_LOGIN = "/api/v1/courier/login";
 
+
+
     public Response create(JCourier courier) {
         return given()
                 .header("Content-type", "application/json")

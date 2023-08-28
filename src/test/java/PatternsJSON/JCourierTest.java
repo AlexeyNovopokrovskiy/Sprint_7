@@ -26,6 +26,8 @@ public class JCourierTest {
         CourierClient courierClient = new CourierClient();
         JCourier courier = CourierGenerator.randomCourier();
 
+
+
         Response response = courierClient.create(courier);
 
         assertEquals(201, response.statusCode());
