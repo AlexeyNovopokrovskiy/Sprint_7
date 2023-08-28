@@ -8,85 +8,86 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 public class JCourierTest {
 
+    private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru";
+
+
     @Before
     public void setUp() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru";
+        RestAssured.baseURI = BASE_URI;
     }
 
-    @Test
+    @Test //объединил проверки "запрос возвращает правильный код ответа"&"успешный запрос возвращает ok: true"
     public void courierCreate(){
-        JCourier courier = new JCourier("narutouzumaki", "test", "naruto");
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(courier)
-                .when()
-                .post("/api/v1/courier");
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourier();
+
+        Response response = courierClient.create(courier);
 
         assertEquals(201, response.statusCode());
+        response.then().assertThat().body("ok",equalTo(true));
+        Response courierLogin = courierClient.login(CourierCreds.credsFrom(courier));
+        assertEquals(200, courierLogin.statusCode());
+    }
+
+    @Test
+    public void courierSameCouriersCreate(){
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourier();
+
+        Response response = courierClient.create(courier);
+        Response response2 = courierClient.sameLoginCreate(CourierCreds.credsFromCreate(courier));
+
+        assertEquals(409, response2.statusCode());
+        Response courierLogin = courierClient.login(CourierCreds.credsFrom(courier));
+        assertEquals(200, courierLogin.statusCode());
 
     }
 
-
     @Test
-    public void courierSameCreate(){
-        JCourier courier = new JCourier("narutouzumaki", "test", "naruto");
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(courier)
-                .when()
-                .post("/api/v1/courier");
+    public void courierSameLoginsCreate(){
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourier();
 
-        assertEquals(409, response.statusCode());
+        Response response = courierClient.create(courier);
+        Response response2 = courierClient.create(courier);
+
+        assertEquals(409, response2.statusCode());
+        Response courierLogin = courierClient.login(CourierCreds.credsFrom(courier));
+        assertEquals(200, courierLogin.statusCode());
 
     }
 
     @Test
     public void courierNoLoginCreate(){
-        JCourier courier = new JCourier("", "test", "naruto");
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(courier)
-                .when()
-                .post("/api/v1/courier");
-
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourierNoLogin();
+        Response response = courierClient.create(courier);
         assertEquals(400, response.statusCode());
-
     }
 
     @Test
     public void courierNoPasswordCreate(){
-        JCourier courier = new JCourier("saskeuchiha", "", "saske");
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(courier)
-                .when()
-                .post("/api/v1/courier");
-
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourierNoPassword();
+        Response response = courierClient.create(courier);
         assertEquals(400, response.statusCode());
-
     }
 
-    @Test //либо firstName необязательный, либо ошибка отловлена. в документации не указано что оно обязательное
+    @Test (expected = AssertionError.class) //по заданию непонятно является ли firstName обязательным. Если да, то ошибка. Если нет то удалить тест
     public void courierNoFirstNameCreate(){
-        JCourier courier = new JCourier("sakuraharuno", "test", "");
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(courier)
-                .when()
-                .post("/api/v1/courier");
-
+        CourierClient courierClient = new CourierClient();
+        JCourier courier = CourierGenerator.randomCourierNoFirstName();
+        Response response = courierClient.create(courier);
         assertEquals(400, response.statusCode());
-
     }
+
+
+
 
 
 }
