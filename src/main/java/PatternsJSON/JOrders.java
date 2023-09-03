@@ -10,7 +10,8 @@ public class JOrders {
     private int rentTime;
     private String deliveryDate;
     private String comment;
-    private String[] color; //необяз
+    private String[] color;
+
 
     public JOrders(){
 

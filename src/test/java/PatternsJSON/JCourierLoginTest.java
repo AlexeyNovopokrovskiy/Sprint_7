@@ -2,14 +2,8 @@ package PatternsJSON;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.*;
 
@@ -33,7 +27,11 @@ public class JCourierLoginTest {
         Response courierLogin = courierClient.login(CourierCreds.credsFrom(courier));
         assertEquals(200, courierLogin.statusCode());
         courierLogin.then().assertThat().body(startsWith("{\"id\""));
-        //System.out.println(courierLogin.asString());
+
+        Response courierDelete = courierClient.deleteCourier(courierLogin.as(JCourier.class).getId());
+        assertEquals(courierDelete.statusCode(),200);
+
+
     }
 
     @Test
@@ -43,6 +41,10 @@ public class JCourierLoginTest {
         Response response = courierClient.create(courier);
         Response courierLogin = courierClient.login(CourierCreds.credsChangedLogin(courier));
         assertEquals(404, courierLogin.statusCode());
+
+        Response courierLoginToGetId = courierClient.login(CourierCreds.credsFrom(courier));
+        Response courierDelete = courierClient.deleteCourier(courierLoginToGetId.as(JCourier.class).getId());
+        assertEquals(courierDelete.statusCode(),200);
     }
 
     @Test
@@ -54,6 +56,10 @@ public class JCourierLoginTest {
         Response courierLogin = courierClient.login(CourierCreds.credsChangedPassword(courier));
         assertEquals(404, courierLogin.statusCode());
 
+        Response courierLoginToGetId = courierClient.login(CourierCreds.credsFrom(courier));
+        Response courierDelete = courierClient.deleteCourier(courierLoginToGetId.as(JCourier.class).getId());
+        assertEquals(courierDelete.statusCode(),200);
+
     }
 
     @Test
@@ -63,6 +69,10 @@ public class JCourierLoginTest {
         Response response = courierClient.create(courier);
         Response courierLogin = courierClient.login(CourierCreds.credsNullifiedLogin(courier));
         assertEquals(400, courierLogin.statusCode());
+
+        Response courierLoginToGetId = courierClient.login(CourierCreds.credsFrom(courier));
+        Response courierDelete = courierClient.deleteCourier(courierLoginToGetId.as(JCourier.class).getId());
+        assertEquals(courierDelete.statusCode(),200);
     }
 
     @Test
@@ -73,6 +83,10 @@ public class JCourierLoginTest {
         Response response = courierClient.create(courier);
         Response courierLogin = courierClient.login(CourierCreds.credsNullifiedPassword(courier));
         assertEquals(400, courierLogin.statusCode());
+
+        Response courierLoginToGetId = courierClient.login(CourierCreds.credsFrom(courier));
+        Response courierDelete = courierClient.deleteCourier(courierLoginToGetId.as(JCourier.class).getId());
+        assertEquals(courierDelete.statusCode(),200);
 
     }
 
