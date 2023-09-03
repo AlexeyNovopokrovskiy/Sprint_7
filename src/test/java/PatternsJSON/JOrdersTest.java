@@ -2,15 +2,10 @@ package PatternsJSON;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -22,7 +17,7 @@ public class JOrdersTest {
 
     @Parameterized.Parameter
     public String[] color;
-    //public String[] a = {"BLACK"};
+
 
     @Parameterized.Parameters // добавили аннотацию
     public static Object[][] param() {
@@ -31,15 +26,9 @@ public class JOrdersTest {
          String[] c = {"BLACK","GREY"};
 
         return new Object[][]{
-
-                /*{new String[]{"BLACK"}},
-                {new String[]{"GREY"}},
-                {new String[]{"BLACK","GREY"}},*/
                 {a},
                 {b},
                 {c}
-
-
         };
     }
 
@@ -65,7 +54,6 @@ public class JOrdersTest {
         Response orderResponse = orderClient.createOrder(order);
         assertEquals(201, orderResponse.statusCode());
         orderResponse.then().assertThat().body(startsWith("{\"track\""));
-        //System.out.println(orderResponse.asString());
     }
 
     @Test
@@ -74,5 +62,4 @@ public class JOrdersTest {
         Response response = orderClient.getAllOrders();
         assertEquals(200,response.statusCode());
     }
-
 }

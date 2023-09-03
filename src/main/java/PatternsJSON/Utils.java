@@ -7,6 +7,7 @@ public class Utils {
     public static String randomString(int length){
         Random random = new Random();
         int leftLimit = 97;
+
         int rightLimit = 122;
         StringBuilder buffer = new StringBuilder(length);
 
@@ -22,6 +23,7 @@ public class Utils {
     public static int rnd(int max){
         return (int) (Math.random() * ++max);
     }
+
 
     public static String rndDate(){
         int day = rnd(26)+1;

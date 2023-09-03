@@ -8,6 +8,9 @@ public class CourierClient {
 
     private static final String BASE_URL = "/api/v1/courier";
     private static final String BASE_URL_LOGIN = "/api/v1/courier/login";
+    private static final String BASE_URL_DELETE = "/api/v1/courier/";
+
+
 
     public Response create(JCourier courier) {
         return given()
@@ -27,7 +30,7 @@ public class CourierClient {
                 .post(BASE_URL_LOGIN);
     }
 
-    public Response sameLoginCreate(CourierCreds same){
+    public Response sameLoginCreate(CourierCreds same) {
         return given()
                 .header("Content-type", "application/json")
                 .and()
@@ -35,4 +38,12 @@ public class CourierClient {
                 .when()
                 .post(BASE_URL);
     }
+
+    public Response deleteCourier(String id) {
+        return given()
+                .header("Content-type", "application/json")
+                .when()
+                .delete(BASE_URL_DELETE + id);
+    }
+
 }

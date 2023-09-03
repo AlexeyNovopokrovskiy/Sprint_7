@@ -1,9 +1,6 @@
 package PatternsJSON;
 
-import java.util.Random;
-
 public class OrderGenerator {
-
 
     public static JOrders orders(String[] colour) {
         return new JOrders(colour)

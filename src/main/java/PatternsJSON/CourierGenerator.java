@@ -9,6 +9,8 @@ public class CourierGenerator {
             .withFirstName(Utils.randomString(10));
     }
 
+
+
     public static JCourier randomCourierNoFirstName(){
         return new JCourier()
                 .withLogin(Utils.randomString(6))
